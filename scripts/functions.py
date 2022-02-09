@@ -1,5 +1,5 @@
 """
-Function implementations to generate single graph examples 
+Function implementations to generate single graph examples. 
 and plot them
 """
 

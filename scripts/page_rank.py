@@ -32,7 +32,6 @@ def page_rank(
     numpy array
         A vector of ranks such that v_i is the i-th rank 
         from [0, 1], and v sums to 1
-
     """
     n_nodes = M.shape[1]
     # Initializes a random probability distribution for

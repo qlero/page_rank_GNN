@@ -12,6 +12,7 @@ class Random_Graph_Generator():
     def __init__(
             self, 
             graph_type: str,
+            print_messages: bool = False
     ) -> None:
         """
         Initialization method
@@ -25,13 +26,16 @@ class Random_Graph_Generator():
         """
         # Defines the generator function
         if graph_type.lower() == "erdos":
-            print("Erdos Graph Generator declared")
+            if print_messages:
+                print("Erdos Graph Generator declared")
             self.type            = "e"
             self.graph_generator = erdos_renyi_graph
         else:
-            print("Scale-Free Graph Generator declared")
+            if print_messages:
+                print("Scale-Free Graph Generator declared")
             self.type            = "s"
             self.graph_generator = scale_free_graph
+        self.print_msg           = print_messages
         # Defines the placeholders
         self.graphs              = None
         self.page_ranks          = None
@@ -62,6 +66,8 @@ class Random_Graph_Generator():
             args    = (n, )
         self.graphs = [self.graph_generator(*args) 
                        for _ in range(m)]
+        if self.print_msg:
+            print(f"{n} graphs were generated")
     
     def graphs_page_rank_compute(
             self, 
@@ -79,6 +85,8 @@ class Random_Graph_Generator():
         """
         self.page_ranks = [pagerank(g, alpha) 
                            for g in self.graphs]
+        if self.print_msg:
+            print("PageRank values computed")
     
     def graphs_retrieve(self) -> tuple:
         """
