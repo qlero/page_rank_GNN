@@ -75,7 +75,7 @@ class Random_Graph_Generator():
         Parameters
         ----------
         alpha : float, optional
-            Damping parameter for PageRank, default=0.85.
+            Damping parameter for PageRank, default=0.85
         """
         self.page_ranks = [pagerank(g, alpha) 
                            for g in self.graphs]
@@ -84,6 +84,13 @@ class Random_Graph_Generator():
         """
         Returns the generated graphs and their respective
         PageRank values in the shape of a X, y tuple.
+        
+        Returns
+        -------
+        Tuple
+            returns the (X, y) tuple where X is the list
+            of graphs, and y the corresponding list of
+            PageRank values
         """
         return (self.graphs, self.page_ranks)
         

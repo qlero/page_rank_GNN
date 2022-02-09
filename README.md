@@ -8,5 +8,5 @@ As such, the repository contains:
 - A GNN with relaxation
 - A GNN with a convolutional graph approach
 
-The python implementations are available in the `script` folder and all details and discussion are covered in the file `page_rank_gnn.ipynb` in the `root`. 
+The python implementations are available in the `scripts` folder and all details and discussion are covered in the file `page_rank_gnn.ipynb` in the `root`. 
 
