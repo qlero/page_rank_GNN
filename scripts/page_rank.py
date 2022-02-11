@@ -2,7 +2,15 @@
 PageRank algorithm with explicit number of iterations.
 """
 
+###########
+# IMPORTS #
+###########
+
 import numpy as np
+
+#############
+# FUNCTIONS #
+#############
 
 def page_rank(
     M: np.ndarray, 

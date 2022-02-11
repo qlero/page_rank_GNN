@@ -4,11 +4,21 @@ Implementation of a class generating random graphs using two methods:
     - Scale free generation
 """
 
+###########
+# IMPORTS #
+###########
+
 from networkx import erdos_renyi_graph, scale_free_graph
 from networkx import pagerank, set_node_attributes, Graph
 
+###########
+# CLASSES #
+###########
+
 class Random_Graph_Generator():
-    
+    """
+    Implementation of a Random Graph Generator.
+    """
     def __init__(
             self, 
             graph_type: str,

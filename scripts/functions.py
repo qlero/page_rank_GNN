@@ -3,6 +3,9 @@ Function implementations to generate single graph examples.
 and plot them
 """
 
+###########
+# IMPORTS #
+###########
 
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
@@ -15,6 +18,10 @@ from networkx import shell_layout
 from networkx import spectral_layout
 from networkx import spiral_layout
 from networkx import spring_layout
+
+#############
+# FUNCTIONS #
+#############
 
 def generate_erdos_graph(
         n: int, 
