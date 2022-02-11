@@ -5,7 +5,7 @@ Implementation of a class generating random graphs using two methods:
 """
 
 from networkx import erdos_renyi_graph, scale_free_graph
-from networkx import pagerank
+from networkx import pagerank, set_node_attributes, Graph
 
 class Random_Graph_Generator():
     
@@ -64,7 +64,7 @@ class Random_Graph_Generator():
             args    = (n, p)
         else:
             args    = (n, )
-        self.graphs = [self.graph_generator(*args) 
+        self.graphs = [Graph(self.graph_generator(*args))
                        for _ in range(m)]
         if self.print_msg:
             print(f"{n} graphs were generated")
@@ -85,6 +85,12 @@ class Random_Graph_Generator():
         """
         self.page_ranks = [pagerank(g, alpha) 
                            for g in self.graphs]
+        for graph, PR in enumerate(self.page_ranks):
+            set_node_attributes(
+                self.graphs[graph], 
+                PR, 
+                "PageRank"
+            )
         if self.print_msg:
             print("PageRank values computed")
     
