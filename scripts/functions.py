@@ -99,7 +99,7 @@ def plot_graph(
               for key, rank in pagerank(graph).items()}
     # Plots the graph
     plt.figure(figsize=(8,8))
-    plt.title(f"Plot of {graph.name} with PageRank values\n" + 
+    plt.title(f"Plot of PageRank values\n" + 
               f"Node position computed with {subtitle}")
     draw_networkx(
         graph,

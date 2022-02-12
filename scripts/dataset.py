@@ -176,10 +176,11 @@ class PageRankDataset(DGLDataset):
             matrix as feature
         """
         # Process the input graph as a DGL graph attributes
-        self.graph = dgl.from_networkx(graph.to_undirected())
+        graph = nx.relabel.convert_node_labels_to_integers(graph)
+        self.graph = dgl.from_networkx(graph)
         # Records the pagerank values as both features and labels
         pageranks =  torch.from_numpy(np.array(pageranks)).float()
-        noise = torch.from_numpy(np.random.rand(len(pageranks), 16)).float()
+        noise = torch.from_numpy(np.random.rand(len(pageranks), 8)).float()/10000
         #torch.ones((len(pageranks), 1))
         if not use_noise:
             self.graph.ndata['feat'] = torch.eye(len(pageranks))
@@ -212,12 +213,12 @@ class PageRankDataset(DGLDataset):
         train_mask    = torch.zeros(n_nodes, dtype=torch.bool)
         val_mask      = torch.zeros(n_nodes, dtype=torch.bool)
         test_mask     = torch.zeros(n_nodes, dtype=torch.bool)
-        train_mask[train_indexes]              = True
+        train_mask[train_indexes] = True
         val_mask[val_indexes] = True
-        test_mask[test_index]       = True
-        self.graph.ndata['train_mask']    = train_mask
-        self.graph.ndata['val_mask']      = val_mask
-        self.graph.ndata['test_mask']     = test_mask
+        test_mask[test_index] = True
+        self.graph.ndata['train_mask'] = train_mask
+        self.graph.ndata['val_mask']   = val_mask
+        self.graph.ndata['test_mask']  = test_mask
 
     def __getitem__(self, i):
         return self.graph
