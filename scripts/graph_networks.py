@@ -191,14 +191,17 @@ class PageRankModelingWithGNN():
                 out_feats = self.n_labels
         )
         # Declares the optimizer
+        lr = 0.005
         if optimizer == "Adam":
-            self.opt = torch.optim.Adam(self.model.parameters(), lr=1e-3)
+            self.opt = torch.optim.Adam(self.model.parameters(), lr=lr)
         elif optimizer == "AdamW":
-            self.opt = torch.optim.AdamW(self.model.parameters(), lr=1e-3)
+            self.opt = torch.optim.AdamW(self.model.parameters(), lr=lr)
         elif optimizer == "Adamax":
-            self.opt = torch.optim.Adamax(self.model.parameters(), lr=1e-3)
+            self.opt = torch.optim.Adamax(self.model.parameters(), lr=lr)
+        elif optimizer == "Adadelta":
+            self.opt = torch.optim.Adadelta(self.model.parameters(), lr=lr)
         else:
-            self.opt = torch.optim.Adadelta(self.model.parameters(), lr=1e-3)
+            self.opt = torch.optim.SGD(self.model.parameters(), lr=lr)
     
     def run(
             self, 
@@ -275,7 +278,7 @@ class PageRankModelingWithGNN():
         # VISUALIZATION STEP #
         ######################
         # Displays the loss convergence
-        plt.figure(figsize=(8,4))
+        plt.figure(figsize=(15,8))
         plt.plot(self.loss_per_epoch)
         plt.title(f"Loss convergence of {self.model_type} model") 
         plt.show()
@@ -411,8 +414,8 @@ class GCN(nn.Module):
     """
     def __init__(self, in_feats, hid_feats, out_feats):
         super(GCN, self).__init__()
-        self.conv1 = dglnn.GraphConv(in_feats, hid_feats, norm="right", allow_zero_in_degree=True)
-        self.conv2 = dglnn.GraphConv(hid_feats, out_feats, norm="right", allow_zero_in_degree=True)
+        self.conv1 = dglnn.GraphConv(in_feats, hid_feats, allow_zero_in_degree=True)
+        self.conv2 = dglnn.GraphConv(hid_feats, out_feats, allow_zero_in_degree=True)
     def forward(self, g, inputs):
         h = self.conv1(g, inputs)
         h = torch.relu(h)

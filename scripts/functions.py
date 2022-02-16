@@ -98,7 +98,7 @@ def plot_graph(
     labels = {key: f"{key}\n\nPR: {round(rank, 2)}"
               for key, rank in pagerank(graph).items()}
     # Plots the graph
-    plt.figure(figsize=(8,8))
+    plt.figure(figsize=(15,8))
     plt.title(f"Plot of PageRank values\n" + 
               f"Node position computed with {subtitle}")
     draw_networkx(

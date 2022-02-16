@@ -180,11 +180,10 @@ class PageRankDataset(DGLDataset):
         self.graph = dgl.from_networkx(graph)
         # Records the pagerank values as both features and labels
         pageranks =  torch.from_numpy(np.array(pageranks)).float()
-        noise = torch.from_numpy(np.random.rand(len(pageranks), 8)).float()/10000
-        #torch.ones((len(pageranks), 1))
         if not use_noise:
             self.graph.ndata['feat'] = torch.eye(len(pageranks))
         else:
+            noise = torch.from_numpy(np.random.rand(len(pageranks), 1)).float()
             self.graph.ndata['feat'] = noise
         self.graph.ndata["label"] = pageranks
         # Saves the training, and validation sizes
