@@ -9,7 +9,7 @@ Implementation of a class generating random graphs using two methods:
 ###########
 
 from networkx import erdos_renyi_graph, scale_free_graph
-from networkx import pagerank, set_node_attributes, Graph
+from networkx import pagerank, set_node_attributes, DiGraph
 
 ###########
 # CLASSES #
@@ -71,17 +71,16 @@ class Random_Graph_Generator():
             Probability for edge creation
         """
         if self.type == "e":
-            args    = (n, p)
+            self.graphs = [DiGraph(self.graph_generator(n, p, directed=True))
+                           for _ in range(m)]
         else:
-            args    = (n, )
-        self.graphs = [Graph(self.graph_generator(*args))
-                       for _ in range(m)]
+            self.graphs = [DiGraph(self.graph_generator(n))
+                           for _ in range(m)]
         if self.print_msg:
             print(f"{n} graphs were generated")
     
     def graphs_page_rank_compute(
-            self, 
-            alpha: float = 0.85
+            self
     ) -> None:
         """
         Given a set of generated graphs stored in the
@@ -93,7 +92,7 @@ class Random_Graph_Generator():
         alpha : float, optional
             Damping parameter for PageRank, default=0.85
         """
-        self.page_ranks = [pagerank(g, alpha) 
+        self.page_ranks = [pagerank(g) 
                            for g in self.graphs]
         for graph, PR in enumerate(self.page_ranks):
             set_node_attributes(

@@ -42,7 +42,7 @@ def generate_erdos_graph(
     g : nx.classes.graph.Graph
         Generated graph
     """
-    g      = erdos_renyi_graph(n, p)
+    g      = erdos_renyi_graph(n, p, directed=True)
     g.name = f"Erdos Graph with parameters n={n}, p={p}"
     return g
     
@@ -107,6 +107,7 @@ def plot_graph(
         pos        = pos,
         labels     = labels,
         font_size  = 10,
-        cmap       = cm.YlGn
+        cmap       = cm.YlGn,
+        arrows     = True
     )
     plt.show()

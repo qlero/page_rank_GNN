@@ -31,7 +31,7 @@ def concatenate_graph_dataset(
 
     Parameters
     ----------
-    X : list of nx.classes.graph.Graph
+    X : list of nx.classes.graph.DiGraph
         List of single, generated graphs
     y : list of floats
         list of dictionary corresponding to the PageRanks 
@@ -45,7 +45,7 @@ def concatenate_graph_dataset(
         
     Returns
     -------
-    Tuple (nx.classes.graph.Graph, list)
+    Tuple (nx.classes.graph.DiGraph, list)
         Single networkx graph containing each generated note
         with their PageRank as label and feature, and a
         separate list of the PageRank values
@@ -132,7 +132,7 @@ def load_concatenated_graph_dataset(
         
     Returns
     -------
-    Tuple (nx.classes.graph.Graph, list)
+    Tuple (nx.classes.graph.DiGraph, list)
         Single networkx graph containing each generated note
         with their PageRank as label and feature, and a
         separate list of the PageRank values
@@ -163,7 +163,7 @@ class PageRankDataset(DGLDataset):
         """
         Parameters
         ----------
-        graph : nx.classes.graph.Graph
+        graph : nx.classes.graph.DiGraph
             Single networkx graph
         pageranks : list of floats
             list of PageRank values of each node of the graph
@@ -177,6 +177,7 @@ class PageRankDataset(DGLDataset):
         """
         # Process the input graph as a DGL graph attributes
         graph = nx.relabel.convert_node_labels_to_integers(graph)
+        n_nodes = graph.number_of_nodes()
         self.graph = dgl.from_networkx(graph)
         # Records the pagerank values as both features and labels
         pageranks =  torch.from_numpy(np.array(pageranks)).float()

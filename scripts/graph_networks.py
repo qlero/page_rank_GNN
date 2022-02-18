@@ -314,27 +314,29 @@ class PageRankModelingWithGNN():
             print("---------------------")
             colors = [graph_truth.nodes()[x]["PageRank"] 
                       for x in graph_truth.nodes()]
-            plt.figure(figsize=(9,9))
+            plt.figure(figsize=(15,8))
             plt.title("Plot of True PageRank values")
             nx.draw_networkx(
                 graph_truth,
                 labels=true_labels,
-                pos=nx.spring_layout(graph_truth),
+                pos=nx.kamada_kawai_layout(graph_truth),
                 node_color = colors,
                 font_size  = 10,
-                cmap       = cm.YlGn)
+                cmap       = cm.YlGn,
+                arrows     = True
+            )
             plt.show()
             print("Plot with predicted labels")
             print("--------------------------")
             colors = [graph_preds.nodes()[x]["PageRank"] 
                       for x in graph_preds.nodes()]
-            plt.figure(figsize=(9,9))
+            plt.figure(figsize=(15,8))
             plt.title("Plot of Predicted PageRank values\n" + \
                       "Note: negative predictions set to 0")
             nx.draw_networkx(
                 graph_preds,
                 labels=pred_labels,
-                pos=nx.spring_layout(graph_preds),
+                pos=nx.kamada_kawai_layout(graph_preds),
                 node_color = colors,
                 font_size  = 10,
                 cmap       = cm.YlGn) 
