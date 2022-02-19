@@ -74,7 +74,6 @@ Where:
     - `\sigma` is an activation function.
 
 See also: https://docs.dgl.ai/api/python/nn.pytorch.html#graphconv
-
 """
 
 #############

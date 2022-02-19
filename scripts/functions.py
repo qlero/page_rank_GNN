@@ -10,6 +10,9 @@ and plot them
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import networkx as nx
+import os
+import shutil
+import sys
 
 from networkx import erdos_renyi_graph, scale_free_graph
 from networkx import pagerank, draw_networkx
@@ -65,6 +68,50 @@ def generate_scale_free_graph(
     g      = scale_free_graph(n)
     g.name = f"Scale-Free Graph with parameter n={n}"
     return g
+    
+def override_torch_gnn_library(
+        skip_download: bool = True
+):
+    """
+    git clones and overrides the library torch_gnn
+    (https://github.com/mtiezzi/torch_gnn.git) with
+    a new script for regression GNN    
+    """
+    path     = "./torch_gnn/"
+    reg_file = "./scripts/regression_gnn_wrapper.py"
+    lib_path = "https://github.com/mtiezzi/torch_gnn.git"
+    if not skip_download:
+        # Deletes a potentially existing archive
+        if os.path.exists(path):
+            shutil.rmtree(path)
+        # Downloads the archive
+        os.system(f"git clone {lib_path}")
+        # Finds the python script in the cloned archive
+        # Retrieves their name
+        files = list(filter(lambda x: x[-2:] == "py", os.listdir(path)))
+        names = list(map(lambda x: x[:-3], files))
+        # Overrides the content of the script by updating
+        # the import dependencies path and statements
+        for file in files:
+            with open(f"{path}{file}", "r") as f:
+                data = f.read()
+                for name in names:
+                    data = data.replace(
+                        f"import {name}", 
+                        f"from . import {name}"
+                    )
+                    data = data.replace(
+                        f"from {name}", 
+                        f"from .{name}"
+                    )
+                    data = data.replace(
+                        f"from . import networkx", 
+                        "import networkx"
+                    )
+            with open(f"{path}{file}", "w") as f:
+                f.write(data)
+    # Copies regression file in torch_gnn root
+    shutil.copyfile(reg_file, path+"regression_gnn_wrapper.py")
     
 def plot_graph(
     graph: nx.classes.graph.Graph,
