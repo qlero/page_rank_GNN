@@ -260,6 +260,7 @@ class PageRankModelingWithGNN():
             val_loss = round(val_loss, 6)
             if epoch%50==0: 
                 print(f"Epoch {epoch},\tloss: {train_loss};\t\tval loss {val_loss}")
+        print(f"Final train loss: {train_loss}, validation loss: {val_loss}.")
         ###############
         # TESTING RUN #
         ###############
@@ -277,7 +278,7 @@ class PageRankModelingWithGNN():
         # VISUALIZATION STEP #
         ######################
         # Displays the loss convergence
-        plt.figure(figsize=(15,8))
+        plt.figure(figsize=(12,5))
         plt.plot(self.loss_per_epoch)
         plt.title(f"Loss convergence of {self.model_type} model") 
         plt.show()
@@ -313,7 +314,7 @@ class PageRankModelingWithGNN():
             print("---------------------")
             colors = [graph_truth.nodes()[x]["PageRank"] 
                       for x in graph_truth.nodes()]
-            plt.figure(figsize=(15,8))
+            plt.figure(figsize=(12,5))
             plt.title("Plot of True PageRank values")
             nx.draw_networkx(
                 graph_truth,
@@ -329,7 +330,7 @@ class PageRankModelingWithGNN():
             print("--------------------------")
             colors = [graph_preds.nodes()[x]["PageRank"] 
                       for x in graph_preds.nodes()]
-            plt.figure(figsize=(15,8))
+            plt.figure(figsize=(12,5))
             plt.title("Plot of Predicted PageRank values\n" + \
                       "Note: negative predictions set to 0")
             nx.draw_networkx(
@@ -379,12 +380,12 @@ class PageRankModelingWithGNN():
             true = true_PageRanks[idx].item()
             error_diff.append(pred-true)
             mse_diff.append((pred-true)**2)
-        plt.figure(figsize=(10, 5))
+        plt.figure(figsize=(12, 5))
         sns.kdeplot(error_diff)
         plt.title("Distribution of Error between PageRank " + \
                   f"prediction and true value with {self.model_type} model")
         plt.show()
-        plt.figure(figsize=(10, 5))
+        plt.figure(figsize=(12, 5))
         plt.hist(mse_diff, bins=50)
         plt.title("Distribution of Mean-Squared Error between PageRank " + \
                   f"prediction and true value with {self.model_type} model")

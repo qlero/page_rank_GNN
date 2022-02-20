@@ -21,6 +21,7 @@ from networkx import shell_layout
 from networkx import spectral_layout
 from networkx import spiral_layout
 from networkx import spring_layout
+from networkx import kamada_kawai_layout
 
 #############
 # FUNCTIONS #
@@ -115,7 +116,7 @@ def override_torch_gnn_library(
     
 def plot_graph(
     graph: nx.classes.graph.Graph,
-    layout: str = "spring_layout"
+    layout: str = "kamada_kawai_layout"
 ) -> None:
     """
     Plots a graph nodes and edges with PageRank labels.
@@ -138,14 +139,17 @@ def plot_graph(
     elif layout == "spiral":
         pos      = spiral_layout(graph)
         subtitle = "a spiral layout"    
-    else:
+    elif layout == "spring":
         pos      = spring_layout(graph)
         subtitle = "Fruchterman-Reingold force-directed algo."
+    else:
+        pos      = kamada_kawai_layout(graph)
+        subtitle = "Kamada Kawai layout"
     # Computes custom labels with PageRank values
     labels = {key: f"{key}\n\nPR: {round(rank, 2)}"
               for key, rank in pagerank(graph).items()}
     # Plots the graph
-    plt.figure(figsize=(15,8))
+    plt.figure(figsize=(12,5))
     plt.title(f"Plot of PageRank values\n" + 
               f"Node position computed with {subtitle}")
     draw_networkx(

@@ -393,7 +393,7 @@ class PageRankModelingWithRelaxationGNN():
             Indicates whether to print two graphs, one with the true
             PageRank values and one with the Estimated ones
         """
-        for epoch in range(1, self.epochs):
+        for epoch in range(1, self.epochs+1):
             out     = self.model.train_step(epoch)
             out_val = self.model.test_step(epoch, step="val")
             self.list_out_train.append(out)
@@ -444,7 +444,7 @@ class PageRankModelingWithRelaxationGNN():
             print("---------------------")
             colors = [truth_g.nodes()[x]["PageRank"] 
                       for x in truth_g.nodes()]
-            plt.figure(figsize=(15,8))
+            plt.figure(figsize=(12,5))
             plt.title("Plot of True PageRank values")
             nx.draw_networkx(
                 truth_g,
@@ -460,7 +460,7 @@ class PageRankModelingWithRelaxationGNN():
             print("--------------------------")
             colors = [preds_g.nodes()[x]["PageRank"] 
                       for x in preds_g.nodes()]
-            plt.figure(figsize=(15,8))
+            plt.figure(figsize=(12,5))
             plt.title("Plot of Predicted PageRank values\n" + \
                       "Note: negative predictions set to 0")
             nx.draw_networkx(
