@@ -339,7 +339,27 @@ class PageRankModelingWithGNN():
                 pos=nx.kamada_kawai_layout(graph_preds),
                 node_color = colors,
                 font_size  = 10,
-                cmap       = cm.YlGn) 
+                cmap       = cm.YlGn)
+            plt.show()
+            print("Ground Truth vs. Predictions")
+            print("--------------------------")
+            plt.figure(figsize=(12,5))
+            plt.title("Ground Truth vs. Predictions\n" + \
+                      "(in increasing order of PageRank value)")
+            truths = np.array(list(truth.values()))
+            preds  = np.array(list(preds.values()))
+            stack  = np.column_stack((truths, preds))
+            stack  = np.sort(stack, axis=0)
+            plt.scatter(
+                np.linspace(1, stack.shape[0], stack.shape[0]), 
+                stack[:,0]
+            )
+            plt.scatter(
+                np.linspace(1, stack.shape[0], stack.shape[0]), 
+                stack[:,1]
+            )
+            plt.legend(["True PageRank", "Predicted PageRank"])
+            plt.show()
             
     def test(
             self, 
