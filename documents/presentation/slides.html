@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>FaceForensics++: Learning to Detect Facial Images</title>
+    <title>Learning PageRank</title>
     <meta charset="utf-8">
     <style>
       /* @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
@@ -29,13 +29,40 @@ count: false
 
 This presentation covers the following project:
 .font80[
-- Reproducing the PageRank algorithm
 - Creating random graphs using 2 methods 
+- Reproducing the PageRank algorithm
 - Computing the graph nodes' respective PageRank
 - Constructing Graph Neural Networks using 2 methods
 - Predicting PageRank
 - Discussion of the results
 ]
+
+---
+
+class: center, middle, title-slide
+
+# 🌐 Generating Random Graphs
+
+---
+
+# Selected Methods
+
+.font70[
+To generate random graphs, we rely on 2 methods:
+- Erdös-Rényi, or binomial graphs: *given a graph with n nodes, each possible edge is kept with a probability p, generating a G_{n,p} graph*
+- Scale-Free graphs: *network whose degree distribution follows a power law*
+]
+<br>
+.font70[**methods:** we use the methods from the Python library `networkx`:
+- `erdos_renyi_graph`
+- `scale_free_graph`]
+
+---
+
+# Example Graphs
+
+<center><img src="images/graph1.png" width="600"></center>
+<center><img src="images/graph2.png" width="600"></center>
 
 ---
 
@@ -52,34 +79,77 @@ It is notably used to compute web pages' weight (as done at Google) given the hy
 <br>
 
 .font50[**Source**: `Page, L. et al. The PageRank Citation Ranking: Bringing Order to the Web. Stanford InfoLab. (1999)`]
+
 ---
 
-# The Recursive Approach
+# The Algorithm
 
-Given a graph $G$
+.font60[Given a graph *G* with *n* nodes and *e* directed edges (with no self-references), each node *i* PR value initialized with a uniform r.v., all summing to 1.
 
-Neural Textures is an **extension of Face2Face** to track and generate facial features. 
-<br/><br/><br/>
-The learning approach revolves around using **Generative Adversarial Network** to compute the mouth area. **Goal**: to reduce the computational complexity of relying on a database
+A node *i* transfers its PR value in equal amount between all nodes *j* it refers to. Such amount granted from a node *i* to a node *j* can be written as:]
+<center><img src="images/PR1.png"></center>
+
+.font60[
+Given *M* the set of nodes *j* linking to a node *i*, and *d* a damping factor:
+]
+
+<center><img src="images/PR2.png"></center>
+
+---
+
+# Example Approach: Iterative (1/2)
+
+.font60[
+We chose to implement the iterative approach of PageRank:
+- Each of the *n* nodes initialized with PR=1/n
+- *d* = 0.85 (default value)
+- *e* a convergence threshold parameter
+- *R* the column vector which rows are the PR values of each node *i*
+
+For *t* timestep, each node *i* is updated as such:
+]
+<center><img src="images/PR3.png"></center>
+
+.font60[
+The process stops when:
+]
+<center><img src="images/PR4.png"></center>
+
+---
+
+# Example Approach: Iterative (2/2)
+
+.font60[
+*Applying a hand-made algorithm is slow and has issues with sparse matrices.*
+<center><img src="images/PRalgo.png"></center>
+
+*We default to the `networkx` implementation, which also applies the iteration method. We yield the given example:*
+
+<center><img src="images/graph5.png" width="550"></center>
+
+]
+
+---
+
+# Applying the Algorithm
+
+.font50[
+<center><img src="images/graph3.png" width="600"></center>
+
+<center><img src="images/graph4.png" width="600"></center>
 ]
 
 ---
 
 class: center, middle, title-slide
 
-# 🗄️ The Paper's Approach
+# 🗄️ Predicting PageRank: Approach
 
 ---
 
 class: center, middle, title-slide
 
 # 🧱 Performance & Limitations
-
----
-
-class: center, middle, title-slide
-
-# 🌐 Future Directions
 
 ---
 
