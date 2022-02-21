@@ -423,23 +423,23 @@ class PageRankModelingWithRelaxationGNN():
                 ]
             )
             print(output_results)
+        # Reconstructs a graph body
+        g = nx.DiGraph()
+        g.add_nodes_from(self.nodes)
+        g.add_edges_from(self.edges)
+        truth_g = g.copy()
+        preds_g = g.copy()
+        truth = {k:self.true_labels[k] 
+                 for k in range(len(self.true_labels))}
+        preds = {k:out_test[k].detach().numpy().item()
+                 for k in range(len(out_test))}
+        nx.set_node_attributes(truth_g, truth, "PageRank")
+        nx.set_node_attributes(preds_g, preds, "PageRank")
+        true_labels = {k:f"{k}\n\nPR: {np.round(truth[k].item(), 3)}" 
+                         for k in range(len(truth))}
+        pred_labels = {k:f"{k}\n\nPR: {np.round(preds[k], 3)}" 
+                         for k in range(len(preds))}
         if print_graph_results:
-            # Reconstructs a graph body
-            g = nx.DiGraph()
-            g.add_nodes_from(self.nodes)
-            g.add_edges_from(self.edges)
-            truth_g = g.copy()
-            preds_g = g.copy()
-            truth = {k:self.true_labels[k] 
-                     for k in range(len(self.true_labels))}
-            preds = {k:out_test[k].detach().numpy().item()
-                     for k in range(len(out_test))}
-            nx.set_node_attributes(truth_g, truth, "PageRank")
-            nx.set_node_attributes(preds_g, preds, "PageRank")
-            true_labels = {k:f"{k}\n\nPR: {np.round(truth[k].item(), 3)}" 
-                             for k in range(len(truth))}
-            pred_labels = {k:f"{k}\n\nPR: {np.round(preds[k], 3)}" 
-                             for k in range(len(preds))}
             print("\n\nPlot with true labels")
             print("---------------------")
             colors = [truth_g.nodes()[x]["PageRank"] 
@@ -471,22 +471,22 @@ class PageRankModelingWithRelaxationGNN():
                 font_size  = 10,
                 cmap       = cm.YlGn)
             plt.show()
-            print("Ground Truth vs. Predictions")
-            print("--------------------------")
-            plt.figure(figsize=(12,5))
-            plt.title("Ground Truth vs. Predictions\n" + \
-                      "(in increasing order of PageRank value)")
-            truths = np.array(list(truth.values()))
-            preds  = np.array(list(preds.values()))
-            stack  = np.column_stack((truths, preds))
-            stack  = np.sort(stack, axis=0)
-            plt.scatter(
-                np.linspace(1, stack.shape[0], stack.shape[0]), 
-                stack[:,0]
-            )
-            plt.scatter(
-                np.linspace(1, stack.shape[0], stack.shape[0]), 
-                stack[:,1]
-            )
-            plt.legend(["True PageRank", "Predicted PageRank"])
-            plt.show()
+        print("Ground Truth vs. Predictions")
+        print("--------------------------")
+        plt.figure(figsize=(12,5))
+        plt.title("Ground Truth vs. Predictions\n" + \
+                  "(in increasing order of PageRank value)")
+        truths = np.array(list(truth.values()))
+        preds  = np.array(list(preds.values()))
+        stack  = np.column_stack((truths, preds))
+        stack  = np.sort(stack, axis=0)
+        plt.scatter(
+            np.linspace(1, stack.shape[0], stack.shape[0]), 
+            stack[:,0]
+        )
+        plt.scatter(
+            np.linspace(1, stack.shape[0], stack.shape[0]), 
+            stack[:,1]
+        )
+        plt.legend(["True PageRank", "Predicted PageRank"])
+        plt.show()

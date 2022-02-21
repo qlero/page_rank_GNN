@@ -59,7 +59,7 @@ GraphConv_description = """
 The model was declared with GraphConv layers (2) which were introduced in:
 > Semi-Supervised Classification with Graph Convolutional Networks
 > by T. N. Kipf, M. Welling
-> https://arxiv.org/pdf/1706.02216.pdf
+> https://arxiv.org/abs/1609.02907
 
 Graph convolution is defined as follows:
 
@@ -299,17 +299,17 @@ class PageRankModelingWithGNN():
                       round(t, 6), "\t", 
                       str(round(np.abs(p-t), 6))+tag)
         # if indicated, displays the true graph and the estimated graph
+        graph_truth = self.raw_graph.clone().to_networkx()
+        truth = {k:truth[k] for k in range(len(truth))}
+        nx.set_node_attributes(graph_truth, truth, "PageRank")
+        graph_preds = self.raw_graph.clone().to_networkx()
+        preds = {k:preds[k] for k in range(len(preds))}
+        nx.set_node_attributes(graph_preds, preds, "PageRank")
+        true_labels = {k:f"{k}\n\nPR: {round(truth[k], 3)}" 
+                         for k in range(len(truth))}
+        pred_labels = {k:f"{k}\n\nPR: {round(preds[k], 3)}" 
+                         for k in range(len(preds))}
         if print_graph_results:
-            graph_truth = self.raw_graph.clone().to_networkx()
-            truth = {k:truth[k] for k in range(len(truth))}
-            nx.set_node_attributes(graph_truth, truth, "PageRank")
-            graph_preds = self.raw_graph.clone().to_networkx()
-            preds = {k:preds[k] for k in range(len(preds))}
-            nx.set_node_attributes(graph_preds, preds, "PageRank")
-            true_labels = {k:f"{k}\n\nPR: {round(truth[k], 3)}" 
-                             for k in range(len(truth))}
-            pred_labels = {k:f"{k}\n\nPR: {round(preds[k], 3)}" 
-                             for k in range(len(preds))}
             print("\n\nPlot with true labels")
             print("---------------------")
             colors = [graph_truth.nodes()[x]["PageRank"] 
@@ -341,25 +341,25 @@ class PageRankModelingWithGNN():
                 font_size  = 10,
                 cmap       = cm.YlGn)
             plt.show()
-            print("Ground Truth vs. Predictions")
-            print("--------------------------")
-            plt.figure(figsize=(12,5))
-            plt.title("Ground Truth vs. Predictions\n" + \
-                      "(in increasing order of PageRank value)")
-            truths = np.array(list(truth.values()))
-            preds  = np.array(list(preds.values()))
-            stack  = np.column_stack((truths, preds))
-            stack  = np.sort(stack, axis=0)
-            plt.scatter(
-                np.linspace(1, stack.shape[0], stack.shape[0]), 
-                stack[:,0]
-            )
-            plt.scatter(
-                np.linspace(1, stack.shape[0], stack.shape[0]), 
-                stack[:,1]
-            )
-            plt.legend(["True PageRank", "Predicted PageRank"])
-            plt.show()
+        print("Ground Truth vs. Predictions")
+        print("--------------------------")
+        plt.figure(figsize=(12,5))
+        plt.title("Ground Truth vs. Predictions\n" + \
+                  "(in increasing order of PageRank value)")
+        truths = np.array(list(truth.values()))
+        preds  = np.array(list(preds.values()))
+        stack  = np.column_stack((truths, preds))
+        stack  = np.sort(stack, axis=0)
+        plt.scatter(
+            np.linspace(1, stack.shape[0], stack.shape[0]), 
+            stack[:,0]
+        )
+        plt.scatter(
+            np.linspace(1, stack.shape[0], stack.shape[0]), 
+            stack[:,1]
+        )
+        plt.legend(["True PageRank", "Predicted PageRank"])
+        plt.show()
             
     def test(
             self, 
