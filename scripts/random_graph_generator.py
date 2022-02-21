@@ -10,6 +10,7 @@ Implementation of a class generating random graphs using two methods:
 
 from networkx import erdos_renyi_graph, scale_free_graph
 from networkx import pagerank, set_node_attributes, DiGraph
+from networkx import selfloop_edges
 
 ###########
 # CLASSES #
@@ -76,6 +77,9 @@ class Random_Graph_Generator():
         else:
             self.graphs = [DiGraph(self.graph_generator(n))
                            for _ in range(m)]
+        # Removes self-loops
+        for graph in self.graphs:
+            graph.remove_edges_from(list(selfloop_edges(graph)))
         if self.print_msg:
             print(f"{n} graphs were generated")
     

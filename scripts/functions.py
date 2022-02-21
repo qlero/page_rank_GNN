@@ -48,6 +48,7 @@ def generate_erdos_graph(
     """
     g      = erdos_renyi_graph(n, p, directed=True)
     g.name = f"Erdos Graph with parameters n={n}, p={p}"
+    g.remove_edges_from(list(nx.selfloop_edges(g)))
     return g
     
 def generate_scale_free_graph(
@@ -68,6 +69,7 @@ def generate_scale_free_graph(
     """
     g      = scale_free_graph(n)
     g.name = f"Scale-Free Graph with parameter n={n}"
+    g.remove_edges_from(list(nx.selfloop_edges(g)))
     return g
     
 def override_torch_gnn_library(
